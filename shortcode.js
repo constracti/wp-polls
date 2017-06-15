@@ -1,6 +1,8 @@
 jQuery( document ).on( 'click', '.kgr-polls label', function() {
 	var label = jQuery( this );
 	var poll = label.parents( '.kgr-polls' );
+	if ( poll.data( 'open' ) !== 'on' )
+		return false;
 	if ( poll.data( 'busy' ) === 'on' )
 		return false;
 	poll.data( 'busy', 'on' );
@@ -14,7 +16,8 @@ jQuery( document ).on( 'click', '.kgr-polls label', function() {
 		inputs.prop( 'checked', false );
 		input.prop( 'checked', true );
 	}
-	label.css( 'font-weight', 'bold' );
+	var cursor = label.css( 'cursor' );
+	label.css( 'cursor', 'wait' );
 	var data = {
 		action: 'kgr-polls',
 		poll: poll.data( 'poll' ),
@@ -27,7 +30,7 @@ jQuery( document ).on( 'click', '.kgr-polls label', function() {
 			data.answers.push( input.val() );
 	} );
 	jQuery.post( poll.data( 'url' ), data ).always( function() {
-		label.css( 'font-weight', 'initial' );
+		label.css( 'cursor', cursor );
 		poll.data( 'busy', 'off' );
 	} );
 	return false;
