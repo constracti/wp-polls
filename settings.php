@@ -3,11 +3,6 @@
 if ( !defined( 'ABSPATH' ) )
 	exit;
 
-add_filter( sprintf( 'plugin_action_links_%s/%s.php', KGR_POLLS_KEY, KGR_POLLS_KEY ), function( array $links ): array {
-	$links[] = sprintf( '<a href="%s">%s</a>', menu_page_url( KGR_POLLS_KEY, FALSE ), 'Settings' );
-	return $links;
-} );
-
 add_action( 'admin_init', function() {
 	if ( !current_user_can( 'administrator' ) )
 		return;
@@ -22,6 +17,7 @@ add_action( 'admin_init', function() {
 		$polls = [];
 		$question = 0;
 		$answers = 0;
+		$multi = 0;
 		$open = 0;
 		while ( $input['question'][ $question ] !== '' ) {
 			$poll = [];
@@ -39,6 +35,12 @@ add_action( 'admin_init', function() {
 				$answers++;
 			}
 			$answers++;
+			$poll['multi'] = FALSE;
+			$multi++;
+			if ( $input['multi'][ $multi ] === 'on' ) {
+				$poll['multi'] = TRUE;
+				$multi++;
+			}
 			$poll['open'] = FALSE;
 			$open++;
 			if ( $input['open'][ $open ] === 'on' ) {
@@ -131,12 +133,20 @@ function kgr_polls_settings_head() {
 	echo '<tr>' . "\n";
 	echo sprintf( '<th class="column-primary">%s</th>', esc_html( 'question' ) ) . "\n";
 	echo sprintf( '<th>%s</th>', esc_html( 'answers' ) ) . "\n";
+	echo sprintf( '<th style="width: 10%%;">%s</th>', esc_html( 'multi' ) ) . "\n";
 	echo sprintf( '<th style="width: 10%%;">%s</th>', esc_html( 'open' ) ) . "\n";
 	echo sprintf( '<th>%s</th>', esc_html( 'actions' ) ) . "\n";
 	echo '</tr>' . "\n";
 }
 
-function kgr_polls_settings_poll( int $id = 0, array $poll = [ 'question' => '', 'answers' => [], 'open' => FALSE ] ) {
+function kgr_polls_settings_poll( int $id = 0, array $poll = [] ) {
+	if ( $poll === [] )
+		$poll = [
+			'question' => '',
+			'answers' => [],
+			'multi' => FALSE,
+			'open' => FALSE,
+		];
 	echo '<tr class="kgr-polls-control-item">' . "\n";
 	echo sprintf( '<td class="column-primary" data-colname="%s">', esc_html( 'question' ) ) . "\n";
 	echo sprintf( '<input type="hidden" name="%s[%s][]" value="%d" />', esc_attr( KGR_POLLS_KEY ), esc_attr( 'id' ), $id ) . "\n";
@@ -159,6 +169,14 @@ function kgr_polls_settings_poll( int $id = 0, array $poll = [ 'question' => '',
 	echo '<div>' . "\n";
 	echo sprintf( '<button type="button" class="button kgr-polls-control-add" style="float: right;">%s</button>', esc_html( 'add' ) ) . "\n";
 	echo '</div>' . "\n";
+	echo '</td>' . "\n";
+	echo sprintf( '<td data-colname="%s" style="width: 10%%;">', esc_html( 'multi' ) ) . "\n";
+	echo sprintf( '<input type="hidden" name="%s[%s][]" value="off" />', esc_attr( KGR_POLLS_KEY ), esc_attr( 'multi' ) ) . "\n";
+	echo sprintf( '<input type="checkbox" name="%s[%s][]" value="on"%s />',
+		esc_attr( KGR_POLLS_KEY ),
+		esc_attr( 'multi' ),
+		checked( $poll['multi'], TRUE, FALSE )
+	) . "\n";
 	echo '</td>' . "\n";
 	echo sprintf( '<td data-colname="%s" style="width: 10%%;">', esc_html( 'open' ) ) . "\n";
 	echo sprintf( '<input type="hidden" name="%s[%s][]" value="off" />', esc_attr( KGR_POLLS_KEY ), esc_attr( 'open' ) ) . "\n";

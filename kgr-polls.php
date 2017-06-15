@@ -9,6 +9,9 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
+# TODO clear irrelevant votes
+# TODO delete options
+
 if ( !defined( 'ABSPATH' ) )
 	exit;
 
@@ -21,3 +24,8 @@ define( 'KGR_POLLS_VAL', [
 ] );
 
 require_once( KGR_POLLS_DIR . 'settings.php' );
+
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( array $links ): array {
+	$links[] = sprintf( '<a href="%s">%s</a>', menu_page_url( KGR_POLLS_KEY, FALSE ), 'Settings' );
+	return $links;
+} );
