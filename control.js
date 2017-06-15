@@ -20,7 +20,9 @@ jQuery( document ).on( 'click', '.kgr-polls-control-add', function() {
 	var items = kgr_polls_control_children( container, '.kgr-polls-control-items' );
 	var item0 = kgr_polls_control_children( container, '.kgr-polls-control-item0' );
 	var item = kgr_polls_control_children( item0, '.kgr-polls-control-item' );
-	item.clone().appendTo( items );
+	item = item.clone().appendTo( items );
+	var inputs = kgr_polls_control_children( item, 'input:not([type="hidden"]), select' );
+	inputs.first().focus();
 } );
 
 jQuery( document ).on( 'click', '.kgr-polls-control-up', function() {
