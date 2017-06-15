@@ -10,7 +10,10 @@
  */
 
 # TODO clear irrelevant votes
+# TODO delete all user meta
 # TODO delete options
+
+# TODO answer ids!!!
 
 if ( !defined( 'ABSPATH' ) )
 	exit;
@@ -30,3 +33,20 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( arra
 	$links[] = sprintf( '<a href="%s">%s</a>', menu_page_url( KGR_POLLS_KEY, FALSE ), 'Settings' );
 	return $links;
 } );
+
+function kgr_polls_results( int $id, array $poll ): array {
+	$results = array_fill_keys( array_keys( $poll['answers'] ), 0 );
+	$key = KGR_POLLS_KEY . '-' . $id;
+	$users = get_users( [
+		'meta_key' => $key,
+		'fields' => 'ids',
+	] );
+	$users = array_map( 'intval', $users );
+	foreach ( $users as $user ) {
+		$metas = get_user_meta( $user, $key, FALSE );
+		$metas = array_map( 'intval', $metas );
+		foreach ( $metas as $meta )
+			$results[ $meta ]++;
+	}
+	return $results;
+}

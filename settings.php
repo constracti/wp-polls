@@ -167,8 +167,10 @@ function kgr_polls_settings_poll( int $id = 0, array $poll = [] ) {
 	echo '</td>' . "\n";
 	echo sprintf( '<td class="kgr-polls-control-container" data-colname="%s">', esc_html( 'answers' ) ) . "\n";
 	echo '<div class="kgr-polls-control-items">' . "\n";
-	foreach ( $poll['answers'] as $answer )
-		kgr_polls_settings_poll_answer( $answer );
+	$results = kgr_polls_results( $id, $poll );
+	$sum = array_sum( $results );
+	foreach ( $poll['answers'] as $answer => $text )
+		kgr_polls_settings_poll_answer( $text, $results[ $answer ], $sum );
 	echo '</div>' . "\n";
 	echo '<div class="kgr-polls-control-item0" style="display: none;">' . "\n";
 	kgr_polls_settings_poll_answer();
@@ -201,12 +203,12 @@ function kgr_polls_settings_poll( int $id = 0, array $poll = [] ) {
 	echo '</tr>' . "\n";
 }
 
-function kgr_polls_settings_poll_answer( string $answer = '' ) {
+function kgr_polls_settings_poll_answer( string $text = '', int $votes = 0, int $sum = -1 ) {
 	echo '<div class="kgr-polls-control-item" style="margin-bottom: 10px;">' . "\n";
 	echo sprintf( '<input type="text" name="%s[%s][]" value="%s" placeholder="%s" autocomplete="off" />',
 		esc_attr( KGR_POLLS_KEY ),
 		esc_attr( 'answers' ),
-		esc_attr( $answer ),
+		esc_attr( $text ),
 		esc_attr( 'answer' )
 	) . "\n";
 	echo '<span style="display: inline-block;">' . "\n";
@@ -214,6 +216,10 @@ function kgr_polls_settings_poll_answer( string $answer = '' ) {
 	echo sprintf( '<button type="button" class="button kgr-polls-control-down">%s</button>', esc_html( 'down' ) ) . "\n";
 	echo sprintf( '<button type="button" class="button kgr-polls-control-delete">%s</button>', esc_html( 'delete' ) ) . "\n";
 	echo '</span>' . "\n";
+	if ( $sum >= 0 ) {
+		echo sprintf( '<progress value="%d" max="%d"></progress>', $votes, $sum ) . "\n";
+		echo sprintf( '<span>%d</span>', $votes ) . "\n";
+	}
 	echo '</div>' . "\n";
 }
 

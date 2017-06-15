@@ -29,6 +29,10 @@ add_shortcode( KGR_POLLS_KEY, function( array $atts ): string {
 	else
 		$html .= sprintf( '<div class="kgr-polls" data-poll="%d">', $id ) . "\n";
 	$html .= sprintf( '<h4>%s</h4>', esc_html( $poll['question'] ) ) . "\n";
+	if ( !$poll['open'] ) {
+		$results = kgr_polls_results( $id, $poll );
+		$sum = array_sum( $results );
+	}
 	foreach ( $poll['answers'] as $answer => $text ) {
 		$html .= sprintf( '<p data-answer="%d">', $answer ) . "\n";
 		$html .= sprintf( '<label style="cursor: %s;">', $poll['open'] && $user !== 0 ? 'pointer' : 'not-allowed' ) . "\n";
@@ -40,6 +44,11 @@ add_shortcode( KGR_POLLS_KEY, function( array $atts ): string {
 		) . "\n";
 		$html .= sprintf( '<span>%s</span>', esc_html( $text ) ) . "\n";
 		$html .= '</label>' . "\n";
+		if ( !$poll['open'] && $sum > 0 ) {
+			$html .= '<br />' . "\n";
+			$html .= sprintf( '<progress value="%d" max="%d"></progress>', $results[ $answer ], $sum ) . "\n";
+			$html .= sprintf( '<span>%d</span>', $results[ $answer ] ) . "\n";
+		}
 		$html .= '</p>' . "\n";
 	}
 	if ( $poll['open'] && $user === 0 )
