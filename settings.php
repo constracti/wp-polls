@@ -156,6 +156,13 @@ function kgr_polls_settings_poll( int $id = 0, array $poll = [] ) {
 		esc_attr( $poll['question'] ),
 		esc_attr( 'question' )
 	) . "\n";
+	if ( $id !== 0 ) {
+		echo '<label style="display: block;">' . "\n";
+		echo sprintf( '<div>%s</div>', 'shortcode' ) . "\n";
+		$shortcode = sprintf( '[%s id="%d"]', KGR_POLLS_KEY, $id );
+		echo sprintf( '<input type="text" onfocus="this.select();" readonly="readonly" value="%s" />', esc_attr( $shortcode ) ) . "\n";
+		echo '</label>' . "\n";
+	}
 	echo '<button type="button" class="toggle-row"></button>' . "\n";
 	echo '</td>' . "\n";
 	echo sprintf( '<td class="kgr-polls-control-container" data-colname="%s">', esc_html( 'answers' ) ) . "\n";

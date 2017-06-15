@@ -23,6 +23,7 @@ define( 'KGR_POLLS_VAL', [
 	'polls' => [],
 ] );
 
+require_once( KGR_POLLS_DIR . 'shortcode.php' );
 require_once( KGR_POLLS_DIR . 'settings.php' );
 
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( array $links ): array {
