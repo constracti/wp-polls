@@ -13,8 +13,6 @@
 # TODO delete all user meta
 # TODO delete options
 
-# TODO answer ids!!!
-
 if ( !defined( 'ABSPATH' ) )
 	exit;
 
@@ -22,8 +20,9 @@ define( 'KGR_POLLS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'KGR_POLLS_URL', plugin_dir_url( __FILE__ ) );
 define( 'KGR_POLLS_KEY', 'kgr-polls' );
 define( 'KGR_POLLS_VAL', [
-	'auto' => 0,
 	'polls' => [],
+	'polls_id' => 0,
+	'answers_id' => 0,
 ] );
 
 require_once( KGR_POLLS_DIR . 'shortcode.php' );
@@ -34,9 +33,10 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( arra
 	return $links;
 } );
 
-function kgr_polls_results( int $id, array $poll ): array {
+// TODO wrong
+function kgr_polls_results( int $poll_id, array $poll ): array {
 	$results = array_fill_keys( array_keys( $poll['answers'] ), 0 );
-	$key = KGR_POLLS_KEY . '-' . $id;
+	$key = KGR_POLLS_KEY . '-' . $poll_id;
 	$users = get_users( [
 		'meta_key' => $key,
 		'fields' => 'ids',
