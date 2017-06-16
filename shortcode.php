@@ -28,7 +28,7 @@ add_shortcode( KGR_POLLS_KEY, function( array $atts ): string {
 		) . "\n";
 	else
 		$html .= sprintf( '<div class="kgr-polls" data-poll="%d">', $poll_id ) . "\n";
-	$html .= sprintf( '<h4>%s</h4>', esc_html( $poll['question'] ) ) . "\n";
+	$html .= sprintf( '<h4>%s</h4>', $poll['question'] ) . "\n";
 	if ( !$poll['open'] ) {
 		$results = kgr_polls_results( $poll_id, $poll );
 		$sum = array_sum( $results );
@@ -42,7 +42,7 @@ add_shortcode( KGR_POLLS_KEY, function( array $atts ): string {
 			checked( in_array( $answer_id, $metas ), TRUE, FALSE ),
 			disabled( !$poll['open'] || $user === 0, TRUE, FALSE )
 		) . "\n";
-		$html .= sprintf( '<span>%s</span>', esc_html( $answer ) ) . "\n";
+		$html .= sprintf( '<span>%s</span>', $answer ) . "\n";
 		$html .= '</label>' . "\n";
 		if ( !$poll['open'] && $sum > 0 )
 			$html .= sprintf( '<progress class="kgr-polls-progress" value="%d" max="%d"></progress>', $results[ $answer_id ], $sum ) . "\n";
