@@ -46,7 +46,8 @@ function kgr_polls_results( int $id, array $poll ): array {
 		$metas = get_user_meta( $user, $key, FALSE );
 		$metas = array_map( 'intval', $metas );
 		foreach ( $metas as $meta )
-			$results[ $meta ]++;
+			if ( array_key_exists( $meta, $results ) )
+				$results[ $meta ]++;
 	}
 	return $results;
 }
