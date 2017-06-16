@@ -10,7 +10,6 @@
  */
 
 # TODO clear irrelevant votes
-# TODO delete all user meta
 
 if ( !defined( 'ABSPATH' ) )
 	exit;
@@ -24,8 +23,9 @@ define( 'KGR_POLLS_VAL', [
 	'answers_id' => 0,
 ] );
 
-require_once( KGR_POLLS_DIR . 'shortcode.php' );
+require_once( KGR_POLLS_DIR . 'option.php' );
 require_once( KGR_POLLS_DIR . 'settings.php' );
+require_once( KGR_POLLS_DIR . 'shortcode.php' );
 
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( array $links ): array {
 	$links[] = sprintf( '<a href="%s">%s</a>', menu_page_url( KGR_POLLS_KEY, FALSE ), 'Settings' );
