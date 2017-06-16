@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/constracti/wp-polls
  * Description: Logged in users can vote. Polls are displayed using shortcodes or widgets.
  * Author: constracti
- * Version: 0.1
+ * Version: 1.0
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
