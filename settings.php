@@ -65,6 +65,13 @@ add_action( 'admin_menu', function() {
 	$menu_title = 'KGR Polls';
 	$menu_slug = KGR_POLLS_KEY;
 	$function = 'kgr_polls_settings';
+	if ( array_key_exists( 'action', $_GET ) ) {
+		switch ( $_GET['action'] ) {
+			case 'delete-option':
+				$function .= '_delete_option';
+				break;
+		}
+	}
 	add_submenu_page( 'options-general.php', $page_title, $menu_title, 'administrator', $menu_slug, $function );
 } );
 
@@ -83,8 +90,9 @@ function kgr_polls_settings() {
 	*/
 	$option = get_option( KGR_POLLS_KEY, KGR_POLLS_VAL );
 	echo '<div class="wrap">' . "\n";
-	echo sprintf( '<h1>%s</h1>', 'KGR Polls' ) . "\n";
-	kgr_polls_settings_notice( 'info', 'info', 'Do not leave empty text fields.' );
+	echo sprintf( '<h1 class="wp-heading-inline">%s</h1>', esc_html( 'KGR Polls' ) ) . "\n";
+	echo '<hr class="wp-header-end" />' . "\n";
+	kgr_polls_settings_notice( 'info', 'info', esc_html( 'Do not leave empty text fields.' ) );
 	echo '<form method="post" action="options.php" class="kgr-polls-control-container">' . "\n";
 	settings_fields( KGR_POLLS_KEY );
 	do_settings_sections( KGR_POLLS_KEY );
@@ -128,22 +136,36 @@ function kgr_polls_settings() {
 	echo sprintf( '<button type="button" class="button kgr-polls-control-add" style="float: right;">%s</button>', 'add' ) . "\n";
 	echo '</p>' . "\n";
 	echo '</form>' . "\n";
-	/*
 	echo sprintf( '<h2>%s</h2>', 'uninstall' ) . "\n";
-	$action = KGR_POLLS_KEY . '-delete';
+	// delete option
 	echo sprintf( '<a href="%s&action=%s&nonce=%s" class="button" onclick="return confirm( this.innerHTML );">%s</a>',
 		menu_page_url( KGR_POLLS_KEY, FALSE ),
-		$action,
-		wp_create_nonce( $action ),
+		'delete-option',
+		wp_create_nonce( KGR_POLLS_KEY . '-delete-option' ),
 		esc_html( 'delete option' )
 	) . "\n";
-	*/
+	echo '</div>' . "\n";
+}
+
+function kgr_polls_settings_delete_option() {
+	if ( !current_user_can( 'administrator' ) )
+		return;
+	echo '<div class="wrap">' . "\n";
+	echo sprintf( '<h1 class="wp-heading-inline">%s</h1>', esc_html( 'KGR Polls' ) ) . "\n";
+	echo sprintf( '<a href="%s" class="page-title-action">%s</a>', menu_page_url( KGR_POLLS_KEY, FALSE ), esc_html( 'back' ) ) . "\n";
+	echo '<hr class="wp-header-end" />' . "\n";
+	if ( wp_verify_nonce( $_GET['nonce'], KGR_POLLS_KEY . '-' . $_GET['action'] ) ) {
+		kgr_polls_settings_notice( 'success', 'yes', esc_html( 'Option deleted.' ) );
+		delete_option( KGR_POLLS_KEY );
+	} else {
+		kgr_polls_settings_notice( 'error', 'no', esc_html( 'Invalid nonce.' ) );
+	}
 	echo '</div>' . "\n";
 }
 
 function kgr_polls_settings_notice( string $class, string $dashicon, string $message ) {
 	echo sprintf( '<div class="notice notice-%s">', $class ) . "\n";
-	echo sprintf( '<p class="dashicons-before dashicons-%s">%s</p>', $dashicon, esc_html( $message ) ) . "\n";
+	echo sprintf( '<p class="dashicons-before dashicons-%s">%s</p>', $dashicon, $message ) . "\n";
 	echo '</div>' . "\n";
 }
 

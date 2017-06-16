@@ -11,7 +11,6 @@
 
 # TODO clear irrelevant votes
 # TODO delete all user meta
-# TODO delete options
 
 if ( !defined( 'ABSPATH' ) )
 	exit;
@@ -33,7 +32,7 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( arra
 	return $links;
 } );
 
-// TODO wrong
+# TODO wrong
 function kgr_polls_results( int $poll_id, array $poll ): array {
 	$results = array_fill_keys( array_keys( $poll['answers'] ), 0 );
 	$key = KGR_POLLS_KEY . '-' . $poll_id;
