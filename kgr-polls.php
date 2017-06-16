@@ -24,6 +24,7 @@ define( 'KGR_POLLS_VAL', [
 require_once( KGR_POLLS_DIR . 'option.php' );
 require_once( KGR_POLLS_DIR . 'settings.php' );
 require_once( KGR_POLLS_DIR . 'shortcode.php' );
+require_once( KGR_POLLS_DIR . 'widget.php' );
 
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( array $links ): array {
 	$links[] = sprintf( '<a href="%s">%s</a>', menu_page_url( KGR_POLLS_KEY, FALSE ), 'Settings' );
