@@ -3,6 +3,7 @@
 /*
  * Plugin Name: KGR Polls
  * Plugin URI: https://github.com/constracti/wp-polls
+ * Description: Logged in users can vote. Polls are displayed using shortcodes or widgets.
  * Author: constracti
  * Version: 0.1
  * License: GPL2
