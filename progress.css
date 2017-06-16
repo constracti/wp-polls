@@ -1,0 +1,12 @@
+.kgr-polls-progress {
+	display: block;
+	height: 1.5em;
+	line-height: 1.5em;
+	width: 100%;
+	text-align: center;
+	margin: 2px 0px;
+}
+
+.kgr-polls-progress::after {
+	content: attr( value );
+}

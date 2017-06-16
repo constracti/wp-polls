@@ -216,15 +216,14 @@ function kgr_polls_settings_poll_answer( string $text = '', int $votes = 0, int 
 	echo sprintf( '<button type="button" class="button kgr-polls-control-down">%s</button>', esc_html( 'down' ) ) . "\n";
 	echo sprintf( '<button type="button" class="button kgr-polls-control-delete">%s</button>', esc_html( 'delete' ) ) . "\n";
 	echo '</span>' . "\n";
-	if ( $sum >= 0 ) {
-		echo sprintf( '<progress value="%d" max="%d"></progress>', $votes, $sum ) . "\n";
-		echo sprintf( '<span>%d</span>', $votes ) . "\n";
-	}
+	if ( $sum >= 0 )
+		echo sprintf( '<progress class="kgr-polls-progress" value="%d" max="%d"></progress>', $votes, $sum ) . "\n";
 	echo '</div>' . "\n";
 }
 
 add_action( 'admin_enqueue_scripts', function( string $hook ) {
 	if ( $hook !== sprintf( 'settings_page_%s', KGR_POLLS_KEY ) )
 		return;
+	wp_enqueue_style( 'kgr-polls-progress', KGR_POLLS_URL . 'progress.css', [], NULL );
 	wp_enqueue_script( 'kgr-polls-control', KGR_POLLS_URL . 'control.js', [ 'jquery' ], NULL );
 } );

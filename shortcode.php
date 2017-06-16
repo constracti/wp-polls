@@ -44,11 +44,8 @@ add_shortcode( KGR_POLLS_KEY, function( array $atts ): string {
 		) . "\n";
 		$html .= sprintf( '<span>%s</span>', esc_html( $text ) ) . "\n";
 		$html .= '</label>' . "\n";
-		if ( !$poll['open'] && $sum > 0 ) {
-			$html .= '<br />' . "\n";
-			$html .= sprintf( '<progress value="%d" max="%d"></progress>', $results[ $answer ], $sum ) . "\n";
-			$html .= sprintf( '<span>%d</span>', $results[ $answer ] ) . "\n";
-		}
+		if ( !$poll['open'] && $sum > 0 )
+			$html .= sprintf( '<progress class="kgr-polls-progress" value="%d" max="%d"></progress>', $results[ $answer ], $sum ) . "\n";
 		$html .= '</p>' . "\n";
 	}
 	if ( $poll['open'] && $user === 0 )
@@ -58,6 +55,7 @@ add_shortcode( KGR_POLLS_KEY, function( array $atts ): string {
 } );
 
 add_action( 'wp_enqueue_scripts', function() {
+	wp_enqueue_style( 'kgr-polls-progress', KGR_POLLS_URL . 'progress.css', [], NULL );
 	wp_enqueue_script( 'kgr-polls-shortcode', KGR_POLLS_URL . 'shortcode.js', [ 'jquery' ], NULL );
 } );
 
