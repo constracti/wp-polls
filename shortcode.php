@@ -45,7 +45,7 @@ add_shortcode( KGR_POLLS_KEY, function( array $atts ): string {
 		$html .= sprintf( '<span>%s</span>', esc_html( $answer ) ) . "\n";
 		$html .= '</label>' . "\n";
 		if ( !$poll['open'] && $sum > 0 )
-			$html .= sprintf( '<progress class="kgr-polls-progress" value="%d" max="%d"></progress>', $results[ $answer ], $sum ) . "\n";
+			$html .= sprintf( '<progress class="kgr-polls-progress" value="%d" max="%d"></progress>', $results[ $answer_id ], $sum ) . "\n";
 		$html .= '</p>' . "\n";
 	}
 	if ( $poll['open'] && $user === 0 )

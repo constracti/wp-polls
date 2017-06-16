@@ -32,21 +32,13 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( arra
 	return $links;
 } );
 
-# TODO wrong
 function kgr_polls_results( int $poll_id, array $poll ): array {
-	$results = array_fill_keys( array_keys( $poll['answers'] ), 0 );
-	$key = KGR_POLLS_KEY . '-' . $poll_id;
-	$users = get_users( [
-		'meta_key' => $key,
-		'fields' => 'ids',
-	] );
-	$users = array_map( 'intval', $users );
-	foreach ( $users as $user ) {
-		$metas = get_user_meta( $user, $key, FALSE );
-		$metas = array_map( 'intval', $metas );
-		foreach ( $metas as $meta )
-			if ( array_key_exists( $meta, $results ) )
-				$results[ $meta ]++;
-	}
+	$results = [];
+	foreach ( array_keys( $poll['answers'] ) as $answer_id )
+		$results[ $answer_id ] = count( get_users( [
+			'meta_key' => KGR_POLLS_KEY,
+			'meta_value' => $answer_id,
+			'fields' => 'ids',
+		] ) );
 	return $results;
 }
