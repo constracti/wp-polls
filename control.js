@@ -6,7 +6,7 @@ function kgr_polls_control_parent( object, selector ) {
 }
 
 function kgr_polls_control_children( object, selector ) {
-	children = jQuery();
+	var children = jQuery();
 	while ( object.length > 0 ) {
 		object = object.children().not( '.kgr-polls-control-container' );
 		children = children.add( object.filter( selector ) );
